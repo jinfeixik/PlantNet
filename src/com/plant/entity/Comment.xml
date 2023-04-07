@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.CommentMapper">
+     <insert id="addComment" parameterType="com.plant.entity.Comment">
+		insert into
+		comment(commentID,userID,replyID,commentTime,commentContent,commentStar,commentState,articleID)
+		values(#{commentID}, #{userID}, #{replyID}, #{commentTime}, #{commentContent}, #{commentStar}, #{commentState}, #{articleID})
+	</insert>
+	
+	<select id="findComment" parameterType="com.plant.entity.Comment"
+		resultMap="commentMap">
+		select * from comment c join article a on c.articleID= a.articleID join user u on c.userID=u.UserID where 1=1
+		<trim prefix="" prefixOverrides="and/or"> 
+         <if  test="articleID!=null and articleID!=''">
+            and c.articleID = ${articleID}
+         </if>
+         <if  test="commentContent!=null and commentContent!=''">
+            and (c.commentContent like '%${commentContent}%' or a.articleTitle like '%${commentContent}%')
+         </if>  
+         </trim>
+          order by c.commentTime DESC
+	</select>
+	
+	<update id="updateComment" parameterType="com.plant.entity.Comment">
+		update Comment   
+		<set>
+		<if test="userID!=null">userID =#{userID},</if>
+		<if test="replyID!=null">replyID=#{replyID},</if>
+		<if test="commentTime!=null">commentTime =#{commentTime},</if>
+		<if test="commentContent!=null">commentContent=#{commentContent},</if>
+		<if test="commentStar!=null">commentStar =#{commentStar},</if>
+		<if test="commentState!=null">commentState=#{commentState},</if>
+		<if test="articleID!=null">articleID =#{articleID},</if>
+	    </set> 		    
+	     where commentID = #{commentID}
+	</update>
+	
+	<resultMap type="com.plant.entity.Comment" id="commentMap">
+		<id property="commentID" column="commentID" />
+		<result property="userID" column="userID" />
+		<result property="replyID" column="replyID" />
+		<result property="commentTime" column="commentTime" />
+		<result property="commentContent" column="commentContent" />
+		<result property="commentStar" column="commentStar" />
+		<result property="commentState" column="commentState" />
+		<result property="articleID" column="articleID" />
+		
+		<association property="article" column="articleID" javaType="com.plant.entity.Article">
+			<id property="articleID" column="articleID" />
+			<result property="plantID" column="plantID" />
+			<result property="articleTitle" column="articleTitle" />
+			<result property="articleContent" column="articleContent" />
+			<result property="articleAuthor" column="articleAuthor" />
+			<result property="articleImage" column="articleImage" />
+			<result property="articleCreateTime" column="articleCreateTime" />
+			<result property="readTimes" column="readTimes" />
+			<result property="articleState" column="articleState" />
+			<result property="articleLikesNumber" column="articleLikesNumber" />
+			<result property="articleCollectNumber" column="articleCollectNumber" />
+			<result property="articleDescribe" column="articleDescribe" />
+		</association>
+		
+		<association property="user" column="userID"
+			javaType="com.plant.entity.User">
+			<result property="userID" column="userID" />
+			<result property="userAccount" column="userAccount" />
+			<result property="userName" column="userName" />
+			<result property="userPassword" column="userPassword" />
+			<result property="userEmail" column="userEmail" />
+			<result property="userCreateTime" column="userCreateTime" />
+			<result property="userAvatar" column="userAvatar" />
+			<result property="userType" column="userType" />
+			<result property="userState" column="userState" />
+			<result property="userAddress" column="userAddress" />
+			<result property="userPhone" column="userPhone" />
+			<result property="userSex" column="userSex" />
+		</association>
+
+	</resultMap>
+	
+	
+</mapper>

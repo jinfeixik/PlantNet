@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.OrderMapper">
+	<insert id="addOrder" parameterType="com.plant.entity.Order">
+		<selectKey keyProperty="orderID" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		`order`(orderID,userID,plantDetailsID,orderNumber,orderCreateTime,paymentMethod,addressID,orderState,orderAmount,orderCode)
+		values(#{orderID}, #{userID}, #{plantDetailsID},
+		#{orderNumber},
+		#{orderCreateTime}, #{paymentMethod}, #{addressID},
+		#{orderState},
+		#{orderAmount},#{orderCode})
+	</insert>
+
+	<update id="updateOrder" parameterType="com.plant.entity.Order">
+		update `order`
+		<set>
+			<if test="userID!=null">userID =#{userID},</if>
+			<if test="plantDetailsID!=null">plantDetailsID =#{plantDetailsID},</if>
+			<if test="orderNumber!=null">orderNumber =#{orderNumber},</if>
+			<if test="orderCreateTime!=null">orderCreateTime =#{orderCreateTime},</if>
+			<if test="paymentMethod!=null">paymentMethod =#{paymentMethod},</if>
+			<if test="addressID!=null">addressID =#{addressID},</if>
+			<if test="orderState!=null">orderState =#{orderState},</if>
+			<if test="orderAmount!=null">orderAmount =#{orderAmount},</if>
+			<if test="orderCode!=null">orderCode =#{orderCode},</if>
+		</set>
+		where orderID = #{orderID}
+	</update>
+
+	<select id="findOrder" parameterType="com.plant.entity.Order"
+		resultMap="orderMap">
+		select * from `order` o join plantDetails pDetails on
+		o.plantDetailsID= pDetails.plantDetailsID
+		join plantDetailsImage
+		pDetailsImage on
+		o.plantDetailsID=pDetailsImage.plantDetailsID join
+		User u on
+		o.userID=u.userID where 1=1
+		<trim prefix="" prefixOverrides="and/or">
+			<if test="orderID!=null and orderID!=''">
+				and o.orderID = ${orderID}
+			</if>
+			<if test="userID!=null and userID!=''">
+				and o.userID = ${userID}
+			</if>
+			<if test="orderState!=null and orderState!=''">
+				and o.orderState = '${orderState}'
+			</if>
+			<if  test="plantDetails!=null and plantDetails!=''">
+			<if test="plantDetails.plantDescribe!=null and plantDetails.plantDescribe!=''">
+				and (pDetails.plantDescribe like '%${plantDetails.plantDescribe}%' or u.userName like '%${plantDetails.plantDescribe}%')
+			</if>
+			</if>
+			<if test="startTime!=null and startTime!=''">
+				and o.orderCreateTime >= '${startTime}'
+			</if>
+			<if test="endTime!=null and endTime!=''">
+				and <![CDATA[o.orderCreateTime  <=  '${endTime}']]>
+			</if>
+		</trim>
+		order by o.orderCreateTime DESC
+	</select>
+	
+	<select id="findSumOrderByOrderCreateTime" parameterType="com.plant.entity.Order"
+		resultMap="sumOrderMap">
+		SELECT count(orderID) orderCount,sum(orderAmount) sumOrderAmount FROM `order` where orderCreateTime like '%${orderCreateTime}%' and orderState!='待支付' 
+	
+	</select>
+
+	<resultMap type="com.plant.entity.Order" id="orderMap">
+		<id property="orderID" column="orderID" />
+		<result property="userID" column="userID" />
+		<result property="plantDetailsID" column="plantDetailsID" />
+		<result property="orderNumber" column="orderNumber" />
+		<result property="orderCreateTime" column="orderCreateTime" />
+		<result property="paymentMethod" column="paymentMethod" />
+		<result property="addressID" column="addressID" />
+		<result property="paymentMethod" column="paymentMethod" />
+		<result property="orderState" column="orderState" />
+		<result property="orderAmount" column="orderAmount" />
+		<result property="orderCode" column="orderCode" />
+
+		<association property="plantDetails" column="plantDetailsID"
+			javaType="com.plant.entity.PlantDetails">
+			<id property="plantDetailsID" column="plantDetailsID" />
+			<result property="plantID" column="plantID" />
+			<result property="plantPrice" column="plantPrice" />
+			<result property="plantSales" column="plantSales" />
+			<result property="plantDescribe" column="plantDescribe" />
+			<result property="plantStock" column="plantStock" />
+			<result property="plantDetailsState" column="plantDetailsState" />
+		</association>
+
+		<association property="plantDetailsImage" column="plantDetailsID"
+			javaType="com.plant.entity.PlantDetailsImage">
+			<id property="plantDetailsImageID" column="plantDetailsImageID" />
+			<result property="plantDetailsID" column="plantDetailsID" />
+			<result property="plantDetailsImagePath" column="plantDetailsImagePath" />
+			<result property="plantDetailsImageDescribe" column="plantDetailsImageDescribe" />
+		</association>
+
+		<association property="user" column="userID"
+			javaType="com.plant.entity.User">
+			<result property="userID" column="userID" />
+			<result property="userAccount" column="userAccount" />
+			<result property="userName" column="userName" />
+			<result property="userPassword" column="userPassword" />
+			<result property="userEmail" column="userEmail" />
+			<result property="userCreateTime" column="userCreateTime" />
+			<result property="userAvatar" column="userAvatar" />
+			<result property="userType" column="userType" />
+			<result property="userState" column="userState" />
+			<result property="userAddress" column="userAddress" />
+			<result property="userPhone" column="userPhone" />
+			<result property="userSex" column="userSex" />
+		</association>
+
+	</resultMap>
+	
+	<resultMap type="com.plant.entity.Order" id="sumOrderMap">
+		<id property="orderID" column="orderID" />
+		<result property="userID" column="userID" />
+		<result property="orderCount" column="orderCount" />
+		<result property="sumOrderAmount" column="sumOrderAmount" />
+	</resultMap>
+
+
+</mapper>

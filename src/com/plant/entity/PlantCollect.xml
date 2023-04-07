@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.PlantCollectMapper">
+
+  <insert id="addPlantCollect" parameterType="com.plant.entity.PlantCollect">
+		insert into
+		plantCollect(userID,plantID,plantCollectTime)
+		values(#{userID}, #{plantID}, #{plantCollectTime})
+	</insert>
+	
+   <delete id="deletePlantCollect" parameterType="com.plant.entity.PlantCollect">
+		delete from PlantCollect where plantID=#{plantID} and userID=#{userID}
+	</delete>
+	
+	<select id="findPlantCollect" parameterType="com.plant.entity.PlantCollect"
+		resultMap="plantCollectMap">
+		select * from plantCollect pCollect join plant p on pCollect.plantID= p.plantID join plantImage pImage on pCollect.plantID=pImage.plantID where 1=1  	 
+		 <trim prefix="" prefixOverrides="and/or"> 
+         <if  test="plantID!=null and plantID!=''">
+            and pCollect.plantID = ${plantID}
+         </if>
+         <if  test="userID!=null and userID!=''">
+            and pCollect.userID = ${userID}
+         </if>
+         </trim>	 
+		 order by pCollect.plantCollectTime  DESC
+	</select>
+		
+	<select id="findSumCollectByPlantCollectTime" parameterType="com.plant.entity.PlantCollect"
+		resultMap="sumPlantCollectMap">
+		select count(plantCollectID) sumCollectNumber from plantCollect where  plantCollectTime like '%${plantCollectTime}%'
+	</select>
+	
+
+	<resultMap type="com.plant.entity.PlantCollect" id="plantCollectMap">
+		<id property="plantCollectID" column="plantCollectID" />
+		<result property="userID" column="userID" />
+		<result property="plantID" column="plantID" />
+		<result property="plantCollectTime" column="plantCollectTime" />
+		
+		<association property="plant" column="plantID" javaType="com.plant.entity.Plant">		
+		<id property="plantID" column="plantID" />
+		<result property="plantName" column="plantName" />
+		<result property="plantState" column="plantState" />
+		<result property="plantCreateTime" column="plantCreateTime" />
+		<result property="plantAddress" column="plantAddress" />
+		<result property="viewTimes" column="viewTimes" />
+		<result property="plantType" column="plantType" />
+		<result property="plantLikesNumber" column="plantLikesNumber" />
+		<result property="plantCollectNumber" column="plantCollectNumber" />
+		<result property="plantEnglishName" column="plantEnglishName" />
+		</association>
+		
+		<association property="plantImage" column="plantID" javaType="com.plant.entity.PlantImage">
+			<id property="plantImageID" column="plantImageID" />
+			<result property="plantID" column="plantID" />
+			<result property="plantImagePath" column="plantImagePath" />
+			<result property="plantImageDescribe" column="plantImageDescribe" />
+			<result property="imageStyle" column="imageStyle" />
+			<result property="imageSpace" column="imageSpace" />
+			<result property="imageTheme" column="imageTheme" />
+			<result property="imageEncyclopedia" column="imageEncyclopedia" />
+			<result property="imageSeason" column="imageSeason" />
+		</association>
+		
+	</resultMap>
+	
+	<resultMap type="com.plant.entity.PlantCollect" id="sumPlantCollectMap">
+		<id property="plantCollectID" column="plantCollectID" />
+		<result property="userID" column="userID" />
+		<result property="plantID" column="plantID" />
+		<result property="plantCollectTime" column="plantCollectTime" />
+		<result property="sumCollectNumber" column="sumCollectNumber" />
+	</resultMap>
+	
+	
+</mapper>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.PlantMapper">
+
+	<insert id="addPlant" parameterType="com.plant.entity.Plant">
+		<selectKey keyProperty="plantID" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		plant(plantName,plantState,plantCreateTime,plantAddress,viewTimes,plantType,plantLikesNumber,plantCollectNumber,plantEnglishName)
+		values(#{plantName}, #{plantState}, #{plantCreateTime}, #{plantAddress}, #{viewTimes}, #{plantType}, #{plantLikesNumber}, #{plantCollectNumber}, #{plantEnglishName})
+	</insert>
+	
+	<select id="findPlant" parameterType="com.plant.entity.Plant"
+		resultMap="plantMap">
+		select * from plant p join plantInfo pInfo on p.plantID= pInfo.plantID join plantImage pImage on p.plantID=pImage.plantID where 1=1  
+		<trim prefix="" prefixOverrides="and/or"> 
+         <if  test="plantName!=null and plantName!=''">
+            and p.plantName like '%${plantName}%'
+         </if>
+         <if test="startTime!=null and startTime!=''">
+             and p.plantCreateTime  >=  '${startTime}'
+         </if> 
+          <if  test="endTime!=null and endTime!=''">
+             and <![CDATA[p.plantCreateTime  <=  '${endTime}']]>  
+         </if>  
+         </trim>
+          order by p.plantCreateTime DESC
+	</select>
+	
+	<select id="findIndexPlant" parameterType="com.plant.entity.Plant"
+		resultMap="plantMap">
+		select * from plant p join plantInfo pInfo on p.plantID= pInfo.plantID join plantImage pImage on p.plantID=pImage.plantID where 1=1  
+		<trim prefix="" prefixOverrides="and/or"> 
+         <if  test="plantState!=null and plantState!=''">
+            and p.plantState = '${plantState}'
+         </if>
+         <if  test="plantImage!=null and plantImage!=''">
+         <if  test="plantImage.imageSeason!=null and plantImage.imageSeason!=''">
+            and pImage.imageSeason = '${plantImage.imageSeason}'
+         </if>
+         </if>
+         </trim>
+          order by p.plantCreateTime DESC
+	</select>
+	
+	<select id="findPlantOrderByViewTimes" parameterType="com.plant.entity.Plant"
+		resultMap="plantMap">
+		select * from plant p join plantInfo pInfo on p.plantID= pInfo.plantID join plantImage pImage on p.plantID=pImage.plantID where 1=1 	 
+		 <trim prefix="" prefixOverrides="and/or"> 
+		 <if  test="plantState!=null and plantState!=''">
+            and p.plantState = '${plantState}'
+         </if>
+		 <if  test="plantImage!=null and plantImage!=''">
+         <if  test="plantImage.imageStyle!=null and plantImage.imageStyle!=''">
+            and pImage.imageStyle = '${plantImage.imageStyle}'
+         </if>
+         <if  test="plantImage.imageSpace!=null and plantImage.imageSpace!=''">
+            and pImage.imageSpace = '${plantImage.imageSpace}'
+         </if>
+         <if  test="plantImage.imageTheme!=null and plantImage.imageTheme!=''">
+            and pImage.imageTheme = '${plantImage.imageTheme}'
+         </if>
+         <if  test="plantImage.imageEncyclopedia!=null and plantImage.imageEncyclopedia!=''">
+            and pImage.imageEncyclopedia = '${plantImage.imageEncyclopedia}'
+         </if>
+         </if>
+         </trim>	 
+		 order by p.viewTimes DESC
+	</select>
+	
+	<select id="findPlantOrderByCollectNumber" parameterType="com.plant.entity.Plant"
+		resultMap="plantMap">
+		select * from plant p join plantInfo pInfo on p.plantID= pInfo.plantID join plantImage pImage on p.plantID=pImage.plantID where p.plantState = '${plantState}' 
+	     <trim prefix="" prefixOverrides="and/or">  
+	     <if  test="plantType!=null and plantType!=''">
+            and p.plantType like '%${plantType}%'
+         </if>
+         <if  test="plantName!=null and plantName!=''">
+            and p.plantName like '%${plantName}%'
+         </if>
+         </trim>
+          order by p.plantCollectNumber DESC
+	</select>
+	
+	<select id="findPlantByID" parameterType="Integer"
+		resultMap="plantMap">
+		select * from plant p join plantInfo pInfo on p.plantID= pInfo.plantID join plantImage pImage on p.plantID=pImage.plantID where p.plantID=#{plantID}
+	</select>
+	
+	<delete id="deletePlantByID" parameterType="Integer">
+		delete from Plant where plantID=#{plantID}
+	</delete>
+	
+	<update id="updatePlantState" parameterType="com.plant.entity.Plant">
+		update Plant   
+		<set>
+		<if test="plantState!=null">plantState =#{plantState},</if>
+		<if test="plantCreateTime!=null">plantCreateTime=#{plantCreateTime},</if>
+	    </set> 		    
+	     where plantID = #{plantID}
+	</update>
+	
+	<update id="updatePlant" parameterType="com.plant.entity.Plant">
+		update Plant   
+		<set>
+		<if test="plantName!=null">plantName = #{plantName},</if>
+		<if test="plantState!=null">plantState=#{plantState},</if>
+		<if test="plantCreateTime!=null">plantCreateTime = #{plantCreateTime},</if>
+		<if test="plantAddress!=null">plantAddress=#{plantAddress},</if>
+		<if test="viewTimes!=null">viewTimes = #{viewTimes},</if>
+		<if test="plantType!=null">plantType=#{plantType},</if>
+		<if test="plantLikesNumber!=null">plantLikesNumber = #{plantLikesNumber},</if>
+		<if test="plantCollectNumber!=null">plantCollectNumber=#{plantCollectNumber},</if>
+		<if test="plantEnglishName!=null">plantEnglishName=#{plantEnglishName},</if>
+	    </set> 		    
+	     where plantID = #{plantID}
+	</update>
+	
+	<!-- 一对一关联查询 -->
+	<resultMap type="com.plant.entity.Plant" id="plantMap">
+		<id property="plantID" column="plantID" />
+		<result property="plantName" column="plantName" />
+		<result property="plantState" column="plantState" />
+		<result property="plantCreateTime" column="plantCreateTime" />
+		<result property="plantAddress" column="plantAddress" />
+		<result property="viewTimes" column="viewTimes" />
+		<result property="plantType" column="plantType" />
+		<result property="plantLikesNumber" column="plantLikesNumber" />
+		<result property="plantCollectNumber" column="plantCollectNumber" />
+		<result property="plantEnglishName" column="plantEnglishName" />
+
+		<association property="plantInfo" column="plantID" javaType="com.plant.entity.PlantInfo">
+			<id property="plantInfoID" column="plantInfoID" />
+			<result property="plantID" column="plantID" />
+			<result property="plantClass" column="plantClass" />
+			<result property="plantDepart" column="plantDepart" />
+			<result property="plantFlowering" column="plantFlowering" />
+			<result property="plantIntroduce" column="plantIntroduce" />
+			<result property="plantFeature" column="plantFeature" />
+			<result property="plantHabit" column="plantHabit" />
+			<result property="plantTechnique" column="plantTechnique" />
+			<result property="plantBreed" column="plantBreed" />
+			<result property="plantPestControl" column="plantPestControl" />
+			<result property="plantArea" column="plantArea" />
+			<result property="plantFunction" column="plantFunction" />
+			<result property="plantLanguage" column="plantLanguage" />
+		</association>
+		
+		<association property="plantImage" column="plantID" javaType="com.plant.entity.PlantImage">
+			<id property="plantImageID" column="plantImageID" />
+			<result property="plantID" column="plantID" />
+			<result property="plantImagePath" column="plantImagePath" />
+			<result property="plantImageDescribe" column="plantImageDescribe" />
+			<result property="imageStyle" column="imageStyle" />
+			<result property="imageSpace" column="imageSpace" />
+			<result property="imageTheme" column="imageTheme" />
+			<result property="imageEncyclopedia" column="imageEncyclopedia" />
+			<result property="imageSeason" column="imageSeason" />
+		</association>
+		
+	</resultMap>
+	
+	
+
+</mapper>

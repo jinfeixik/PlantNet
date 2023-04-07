@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.ArticleCollectMapper">
+
+   <insert id="addArticleCollect" parameterType="com.plant.entity.ArticleCollect">
+		insert into
+		articleCollect(userID,articleID,articleCollectTime)
+		values(#{userID}, #{articleID}, #{articleCollectTime})
+	</insert>
+	
+   <delete id="deleteArticleCollect" parameterType="com.plant.entity.ArticleCollect">
+		delete from articleCollect where articleID=#{articleID} and userID=#{userID}
+	</delete>
+
+	<select id="findArticleCollect" parameterType="com.plant.entity.ArticleCollect"
+		resultMap="articleCollectMap">
+		select * from articleCollect aCollect join Article a on aCollect.articleID=a.articleID where 1=1
+		<trim prefix="" prefixOverrides="and/or">
+			<if test="articleCollectID!=null and userID!=''">
+				and aCollect.userID = ${userID}
+			</if>
+			<if test="articleID!=null and articleID!=''">
+				and aCollect.articleID = ${articleID}
+			</if>
+			<if test="userID!=null and userID!=''">
+				and aCollect.userID = ${userID}
+			</if>
+			<if  test="article!=null and article!=''">
+			<if test="article.articleState!=null and article.articleState!=''">
+				and a.articleState = '${article.articleState}'
+			</if>
+			</if>
+		</trim>
+		order by aCollect.articleCollectTime DESC
+	</select>
+	
+	<resultMap type="com.plant.entity.ArticleCollect" id="articleCollectMap">
+		<id property="articleCollectID" column="articleCollectID" />
+		<result property="userID" column="userID" />
+		<result property="articleID" column="articleID" />
+		<result property="articleCollectTime" column="articleCollectTime" />
+		
+		<association property="article" column="articleID" javaType="com.plant.entity.Article">
+			<id property="articleID" column="articleID" />
+			<result property="plantID" column="plantID" />
+			<result property="articleTitle" column="articleTitle" />
+			<result property="articleContent" column="articleContent" />
+			<result property="articleAuthor" column="articleAuthor" />
+			<result property="articleImage" column="articleImage" />
+			<result property="articleCreateTime" column="articleCreateTime" />
+			<result property="readTimes" column="readTimes" />
+			<result property="articleState" column="articleState" />
+			<result property="articleLikesNumber" column="articleLikesNumber" />
+			<result property="articleCollectNumber" column="articleCollectNumber" />
+			<result property="articleDescribe" column="articleDescribe" />
+		</association>
+
+	</resultMap>
+
+
+</mapper>

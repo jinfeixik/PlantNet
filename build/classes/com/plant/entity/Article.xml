@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.ArticleMapper">
+  <insert id="addArticle" parameterType="com.plant.entity.Article">
+		insert into
+		article(plantID,articleTitle,articleContent,articleAuthor,articleImage,articleCreateTime,readTimes,articleState,articleLikesNumber,articleCollectNumber,articleDescribe)
+		values(#{plantID}, #{articleTitle}, #{articleContent}, #{articleAuthor}, #{articleImage}, #{articleCreateTime}, #{readTimes}, #{articleState}, #{articleLikesNumber},#{articleCollectNumber},#{articleDescribe})
+	</insert>
+	
+	<update id="updateArticle" parameterType="com.plant.entity.Article">
+		update Article   
+		<set>
+		<if test="plantID!=null">plantID =#{plantID},</if>
+		<if test="articleTitle!=null">articleTitle=#{articleTitle},</if>
+		<if test="articleContent!=null">articleContent =#{articleContent},</if>
+		<if test="articleAuthor!=null">articleAuthor=#{articleAuthor},</if>
+		<if test="articleImage!=null">articleImage =#{articleImage},</if>
+		<if test="articleCreateTime!=null">articleCreateTime=#{articleCreateTime},</if>
+		<if test="readTimes!=null">readTimes =#{readTimes},</if>
+		<if test="articleState!=null">articleState=#{articleState},</if>
+		<if test="articleLikesNumber!=null">articleLikesNumber =#{articleLikesNumber},</if>
+		<if test="articleCollectNumber!=null">articleCollectNumber=#{articleCollectNumber},</if>
+		<if test="articleDescribe!=null">articleDescribe=#{articleDescribe},</if>
+	    </set> 		    
+	     where articleID = #{articleID}
+	</update>
+	
+	<select id="findArticle" parameterType="com.plant.entity.Article"
+		resultMap="articleMap">
+		select * from article where 1=1
+		<trim prefix="" prefixOverrides="and/or"> 
+         <if  test="articleState!=null and articleState!=''">
+            and articleState like '%${articleState}%'
+         </if>
+          <if  test="articleID!=null and articleID!=''">
+            and articleID = ${articleID}
+         </if>
+         <if  test="articleTitle!=null and articleTitle!=''">
+            and articleTitle like '%${articleTitle}%'
+         </if>
+         <if  test="articleAuthor!=null and articleAuthor!=''">
+            and articleAuthor like '%${articleAuthor}%'
+         </if>
+         </trim>
+          order by articleCreateTime DESC
+	</select>
+	
+	<select id="findOtherArticleByArticleAuthor" parameterType="com.plant.entity.Article"
+		resultMap="articleMap">
+		select * from article where 1=1
+		<trim prefix="" prefixOverrides="and/or"> 
+         <if  test="articleState!=null and articleState!=''">
+            and articleState like '%${articleState}%'
+         </if>
+         <if  test="articleAuthor!=null and articleAuthor!=''">
+            and articleAuthor = '${articleAuthor}'
+         </if> 
+         <if  test="articleID!=null and articleID!=''">
+            and articleID != ${articleID}
+         </if>  
+         </trim>
+          order by articleCreateTime DESC
+	</select>
+	
+	<select id="findArticleOrderByReadTimes" parameterType="com.plant.entity.Article"
+		resultMap="articleMap">
+		select * from article where 1=1
+		<trim prefix="" prefixOverrides="and/or"> 
+         <if  test="articleState!=null and articleState!=''">
+            and articleState like '%${articleState}%'
+         </if>
+         <if  test="articleTitle!=null and articleTitle!=''">
+            and articleTitle like '%${articleTitle}%'
+         </if>  
+         </trim>
+          order by readTimes DESC
+	</select>
+	
+		<resultMap type="com.plant.entity.Article" id="articleMap">
+		<id property="articleID" column="articleID" />
+		<result property="plantID" column="plantID" />
+		<result property="articleTitle" column="articleTitle" />
+		<result property="articleContent" column="articleContent" />
+		<result property="articleAuthor" column="articleAuthor" />
+		<result property="articleImage" column="articleImage" />
+		<result property="articleCreateTime" column="articleCreateTime" />
+		<result property="readTimes" column="readTimes" />
+		<result property="articleState" column="articleState" />
+		<result property="articleLikesNumber" column="articleLikesNumber" />
+		<result property="articleCollectNumber" column="articleCollectNumber" />
+		<result property="articleDescribe" column="articleDescribe" />
+
+	</resultMap>
+</mapper>

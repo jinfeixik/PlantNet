@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.AddressMapper">
+
+	<insert id="addAddress" parameterType="com.plant.entity.Address">
+		insert into
+		Address(userID,isDefault,addressPhone,recipient,province,city,county,addressInfo)
+		values(#{userID}, #{isDefault}, #{addressPhone},
+		#{recipient}, #{province}, #{city}, #{county},
+		#{addressInfo})
+	</insert>
+	
+	<select id="findAddress" parameterType="com.plant.entity.Address"
+		resultMap="addressMap">
+		select * from address where 1=1
+		
+		 <trim prefix="" prefixOverrides="and/or">  
+         <if  test="userID!=null">
+            and userID = ${userID}
+         </if>
+         <if  test="addressID!=null">
+            and addressID = ${addressID}
+         </if>
+         <if  test="isDefault!=null">
+            and isDefault = '${isDefault}'
+         </if>
+         </trim>
+		
+		 order by addressID DESC
+	</select>
+	
+	<delete id="deleteAddress" parameterType="Integer">
+		delete from address where addressID=#{addressID}
+	</delete>
+	
+	<update id="updateAddress" parameterType="com.plant.entity.Address">
+		update address   
+		<set>
+		<if test="userID!=null">userID = #{userID},</if>
+		<if test="isDefault!=null">isDefault=#{isDefault},</if>
+		<if test="addressPhone!=null">addressPhone = #{addressPhone},</if>
+		<if test="recipient!=null">recipient=#{recipient},</if>
+		<if test="province!=null">province = #{province},</if>
+		<if test="city!=null">city=#{city},</if>
+		<if test="county!=null">county = #{county},</if>
+		<if test="addressInfo!=null">addressInfo=#{addressInfo}</if>
+	    </set>
+	    where userID = ${userID}
+	    <trim prefix="" prefixOverrides="and/or">  
+	     <if  test="addressID!=null">
+            and addressID = ${addressID}
+         </if>
+         </trim> 		    
+	</update>
+	
+	<resultMap type="com.plant.entity.Address" id="addressMap">
+		<id property="addressID" column="addressID" />
+		<result property="userID" column="userID" />
+		<result property="isDefault" column="isDefault" />
+		<result property="addressPhone" column="addressPhone" />
+		<result property="recipient" column="recipient" />
+		<result property="province" column="province" />
+		<result property="city" column="city" />
+		<result property="county" column="county" />
+		<result property="addressInfo" column="addressInfo" />
+
+	</resultMap>
+
+
+</mapper>

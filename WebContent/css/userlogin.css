@@ -1,0 +1,69 @@
+﻿@charset 'utf-8';
+
+/*--- User CSS ---*/
+.main{background-color:#FFFFFF;}
+.usermain{width:664px;margin:70px auto;clear:both;overflow:hidden;}
+.usermain h1.title{font-size:24px;height:40px;line-height:40px;margin-bottom:30px;border-bottom:1px dotted #E0E0D4;}
+
+.usermain .cate{}
+.usermain .cate .title{font-size:14px;font-weight:bold;margin-bottom:30px;}
+
+.usermain .cate .list{margin-left:70px;}
+.usermain .cate .list a{width:160px;height:32px;display:inline-block;line-height:32px;margin:0 6px;color:#FFFFFF;text-indent:62px;font-size:12px;cursor:pointer;background:url('../images/qst.png') no-repeat;text-decoration:none;}
+.usermain .cate .list a.qq{background-position:0px 0px;}
+.usermain .cate .list a.qq:hover{background-position:0px -38px;}
+.usermain .cate .list a.qq:active{background-position:0px -75px;}
+.usermain .cate .list a.sina{background-position:0px -112px;}
+.usermain .cate .list a.sina:hover{background-position:0px -149px;}
+.usermain .cate .list a.sina:active{background-position:0px -186px;}
+.usermain .cate .list a.tqq{background-position:0px -223px;}
+.usermain .cate .list a.tqq:hover{background-position:0px -260px;}
+.usermain .cate .list a.tqq:active{background-position:0px -297px;}
+
+.usermain .cate .handy{margin:20px 0 40px 265px;}
+.usermain .cate .handy a{width:52px;height:18px;line-height:18px;display:inline-block;padding-left:23px;cursor:pointer;margin-left:5px;}
+.usermain .cate .handy a.renren{background:url('../images/logo_icon.gif') no-repeat 0 -69px;}
+.usermain .cate .handy a.douban{background:url('../images/logo_icon.gif') no-repeat 2px 0;}
+.usermain .cate .handy a.baidu{background:url('../images/logo_icon.gif') no-repeat 0 -36px;}
+.usermain .cate .handy a.taobao{background:url('../images/logo_icon.gif') no-repeat 0 -102px;}
+
+.usermain .register{}
+.usermain .register .title{font-size:14px;font-weight:bold;margin-bottom:30px;}
+
+.usermain .register .list{margin-left:90px;clear:both;overflow:hidden;height:40px;}
+.usermain .register .list label{width:60px;line-height:32px;font-size:14px;float:left;text-align:right;margin-right:10px;}
+.usermain .register .list input.s-txt{width:250px;height:22px;line-height:22px;float:left;*margin-left:-20px;_margin-left:0;color:#999999;padding:5px 0px 5px 10px;font-size:14px;border:1px solid #DEDED3;background-color:#FFFFFF;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;}
+.usermain .register .list input.s-txt-focus{width:250px;height:22px;line-height:22px;float:left;*margin-left:-20px;_margin-left:0;color:#999999;padding:5px 0px 5px 10px;font-size:14px;border:1px solid #FE8E21;background-color:#FFFFFF;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;}
+.usermain .register .list span.lab{float:left;margin:9px 19px 0 0;}
+.usermain .register .list span.tab{float:left;margin-top:2px;}
+.usermain .register .list span.tab select{height:32px;line-height:32px;color:#999999;padding:5px;font-size:14px;border:1px solid #DEDED3;background-color:#FFFFFF;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;}
+.usermain .register .list span.tab select:hover{border-color:#FE8E21;}
+
+.usermain .register .list span.tip{width:200px;height:32px;line-height:32px;display:inline;color:#FF0000;margin-left:10px;}
+.usermain .register .msg{height:22px;line-height:22px;display:block;color:#999999;margin-left:160px;clear:both;overflow:hidden;}
+
+.usermain .register .code{margin-left:90px;}
+.usermain .register .code input.code{width:105px;height:22px;line-height:22px;margin-top:8px;float:left;padding:5px 0px 5px 15px;font-size:12px;border:1px solid #DEDED3;margin-left:70px;background-color:#FFFFFF;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:8px;border-radius:5px;}
+.usermain .register .code input.code-focus{width:105px;height:22px;line-height:22px;margin-top:8px;float:left;padding:5px 0px 5px 15px;font-size:12px;border:1px solid #FE8E21;margin-left:70px;background-color:#FFFFFF;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:8px;border-radius:5px;}
+.usermain .register .code img.codeimg{float:left;margin:0 10px;border:0 none;margin-top:10px;}
+.usermain .register .code a.change{line-height:30px;float:left;margin-top:10px;}
+
+.usermain .register .protocol{color:#999999;display:block;margin:20px 0 20px 160px;}
+.usermain .register .protocol input.check{}
+
+.usermain .register .sign{margin-left:90px;}
+.usermain .register .sign .submit{width:80px;height:36px;line-height:36px;font-size:14px;background-color:#6FBFB1;border:0 none;color:#FFFFFF;float:left;cursor:pointer;text-align:center;display:inline-block;margin:0 10px 0 70px;-moz-border-radius:5px;-khtml-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;}
+.usermain .register .sign .submit:hover{background:#8cccc1;}
+.usermain .register .sign span.tip{line-height:40px;float:left;}
+
+.usermain .line{width:664px;height:60px;background:url('../images/huo.png') no-repeat;}
+
+
+/*错误提示框*/
+.error-box{width:300px;height:40px;line-height:40px;text-align:center;opacity:0.8}
+.error-box p{color:#FF0000;}
+.txt-list{background:#202326;position:absolute;left:1px;top:300;padding:3px 1px;width:269px;line-height: 26px;text-align:left;z-index: 999;}
+.on-changes{display:none;}
+.txt-list p{color:#fff;font-size:14px;font-family: "微软雅黑";color:#999;padding-left:12px;}
+.txt-list ul li{display:block;height:26px;line-height:26px;font-family:"微软雅黑";color:#fff;width:250px;padding:0 10px;margin:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.txt-list ul li:hover{background:#2E3236;}

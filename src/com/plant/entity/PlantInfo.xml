@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.PlantInfoMapper">
+
+	<insert id="addPlantInfo" parameterType="com.plant.entity.PlantInfo">
+		insert into
+		plantInfo(plantID,plantClass,plantDepart,plantFlowering,plantIntroduce,
+		plantFeature,plantHabit,plantTechnique,plantBreed,plantPestControl,plantArea,plantFunction,plantLanguage)
+		values(#{plantID}, #{plantClass}, #{plantDepart}, #{plantFlowering},
+		#{plantIntroduce}, #{plantFeature},
+		#{plantHabit}, #{plantTechnique},
+		#{plantBreed}, #{plantPestControl},
+		#{plantArea},#{plantFunction},#{plantLanguage})
+	</insert>
+	
+	<update id="updatePlantInfo" parameterType="com.plant.entity.PlantInfo">
+		update PlantInfo   
+		<set>
+		<if test="plantClass!=null">plantClass = #{plantClass},</if>
+		<if test="plantDepart!=null">plantDepart=#{plantDepart},</if>
+		<if test="plantFlowering!=null">plantFlowering = #{plantFlowering},</if>
+		<if test="plantIntroduce!=null">plantIntroduce=#{plantIntroduce},</if>
+		<if test="plantFeature!=null">plantFeature = #{plantFeature},</if>
+		<if test="plantHabit!=null">plantHabit=#{plantHabit},</if>
+		<if test="plantTechnique!=null">plantTechnique = #{plantTechnique},</if>
+		<if test="plantBreed!=null">plantBreed=#{plantBreed},</if>
+		<if test="plantPestControl!=null">plantPestControl=#{plantPestControl},</if>
+		<if test="plantArea!=null">plantArea=#{plantArea},</if>
+		<if test="plantFunction!=null">plantFunction=#{plantFunction},</if>
+		<if test="plantLanguage!=null">plantLanguage=#{plantLanguage},</if>
+	    </set> 		    
+	     where plantInfoID = #{plantInfoID}
+	</update>
+
+	<delete id="deletePlantInfoByID" parameterType="Integer">
+		delete from
+		PlantInfo where plantID=#{plantID}
+	</delete>
+
+</mapper>

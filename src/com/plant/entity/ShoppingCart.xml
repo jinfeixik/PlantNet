@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.ShoppingCartMapper">
+
+	<insert id="addShoppingCart" parameterType="com.plant.entity.ShoppingCart">
+		insert into
+		ShoppingCart(userID,plantDetailsID,shoppingCartNumber,shoppingCartCreateTime,shoppingCartAmount)
+		values(#{userID}, #{plantDetailsID}, #{shoppingCartNumber},
+		#{shoppingCartCreateTime},#{shoppingCartAmount})
+	</insert>
+
+	<update id="updateShoppingCart" parameterType="com.plant.entity.ShoppingCart">
+		update ShoppingCart
+		<set>
+			<if test="userID!=null">userID = #{userID},</if>
+			<if test="plantDetailsID!=null">plantDetailsID=#{plantDetailsID},</if>
+			<if test="shoppingCartNumber!=null">shoppingCartNumber = #{shoppingCartNumber},</if>
+			<if test="shoppingCartCreateTime!=null">shoppingCartCreateTime=#{shoppingCartCreateTime},</if>
+			<if test="shoppingCartAmount!=null">shoppingCartAmount = #{shoppingCartAmount},</if>
+		</set>
+		where shoppingCartID = #{shoppingCartID}
+	</update>
+	
+	<select id="findShoppingCart" parameterType="com.plant.entity.ShoppingCart"
+		resultMap="shoppingCartMap">
+		select * from shoppingCart s join plantDetails pDetails on s.plantDetailsID= pDetails.plantDetailsID join plantDetailsImage pDetailsImage on s.plantDetailsID= pDetailsImage.plantDetailsID where 1=1  
+		<trim prefix="" prefixOverrides="and/or"> 
+         <if  test="plantDetailsID!=null">
+            and s.plantDetailsID = ${plantDetailsID}
+         </if>
+         <if  test="userID!=null">
+            and s.userID = ${userID}
+         </if>
+         </trim>
+          order by s.shoppingCartCreateTime DESC
+	</select>
+	
+	<delete id="deleteShoppingCart" parameterType="Integer">
+		delete from shoppingCart where shoppingCartID=#{shoppingCartID}
+	</delete>
+
+	<resultMap type="com.plant.entity.ShoppingCart" id="shoppingCartMap">
+		<id property="shoppingCartID" column="shoppingCartID" />
+		<result property="userID" column="userID" />
+		<result property="plantDetailsID" column="plantDetailsID" />
+		<result property="shoppingCartNumber" column="shoppingCartNumber" />
+		<result property="shoppingCartCreateTime" column="shoppingCartCreateTime" />
+		<result property="shoppingCartAmount" column="shoppingCartAmount" />
+
+		<association property="plantDetails" column="plantDetailsID"
+			javaType="com.plant.entity.PlantDetails">
+			<id property="plantDetailsID" column="plantDetailsID" />
+			<result property="plantID" column="plantID" />
+			<result property="plantPrice" column="plantPrice" />
+			<result property="plantSales" column="plantSales" />
+			<result property="plantDescribe" column="plantDescribe" />
+			<result property="plantStock" column="plantStock" />
+			<result property="plantDetailsState" column="plantDetailsState" />
+		</association>
+		
+		<association property="plantDetailsImage" column="plantDetailsID"
+			javaType="com.plant.entity.PlantDetailsImage">
+			<id property="plantDetailsImageID" column="plantDetailsImageID" />
+			<result property="plantDetailsID" column="plantDetailsID" />
+			<result property="plantDetailsImagePath" column="plantDetailsImagePath" />
+			<result property="plantDetailsImageDescribe" column="plantDetailsImageDescribe" />
+		</association>
+
+	</resultMap>
+
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.UserMapper">
+	<insert id="registerUser" parameterType="com.plant.entity.User">
+		insert into
+		user(userName,userAccount,userPassword,userEmail,userCreateTime,
+		userAvatar,userType,userState,userAddress,userPhone,userSex)
+		values(#{userName}, #{userAccount}, #{userPassword}, #{userEmail},
+		#{userCreateTime}, #{userAvatar},
+		#{userType}, #{userState},
+		#{userAddress}, #{userPhone}, #{userSex})
+	</insert>
+
+	<update id="updateUser" parameterType="com.plant.entity.User">
+		update User
+		<set>
+			<if test="userName!=null">userName = #{userName},</if>
+			<if test="userAccount!=null">userAccount=#{userAccount},</if>
+			<if test="userPassword!=null">userPassword = #{userPassword},</if>
+			<if test="userEmail!=null">userEmail=#{userEmail},</if>
+			<if test="userCreateTime!=null">userCreateTime = #{userCreateTime},</if>
+			<if test="userAvatar!=null">userAvatar=#{userAvatar},</if>
+			<if test="userType!=null">userType = #{userType},</if>
+			<if test="userState!=null">userState=#{userState},</if>
+			<if test="userAddress!=null">userAddress=#{userAddress},</if>
+			<if test="userPhone!=null">userPhone=#{userPhone},</if>
+			<if test="userSex!=null">userSex=#{userSex},</if>
+		</set>
+		where userID = #{userID}
+	</update>
+
+	<select id="loginUser" parameterType="com.plant.entity.User"
+		resultMap="userMap">
+		select * from user where userAccount=#{userAccount} and
+		userState='可用' and
+		userPassword=#{userPassword}
+	</select>
+
+	<!-- 根据昵称查找用户信息 -->
+	<select id="findIsUserNameExist" parameterType="string"
+		resultMap="userMap">
+		select * from user where userName=#{userName}
+	</select>
+
+	<!-- 条件查找用户信息 -->
+	<select id="findUser" parameterType="com.plant.entity.User"
+		resultMap="userMap">
+		select * from user where userType!='管理员'
+		<trim prefix="" prefixOverrides="and/or">
+			<if test="userName!=null and userName!=''">
+				and userName like '%${userName}%'
+			</if>
+			<if test="startTime!=null and startTime!=''">
+				and userCreateTime >= '${startTime}'
+			</if>
+			<if test="endTime!=null and endTime!=''">
+				and <![CDATA[userCreateTime  <=  '${endTime}']]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- 根据账号查找用户信息 -->
+	<select id="findIsUserAccountExist" parameterType="string"
+		resultMap="userMap">
+		select * from user where userAccount=#{userAccount}
+	</select>
+
+	<resultMap type="com.plant.entity.User" id="userMap">
+		<result property="userID" column="userID" />
+		<result property="userAccount" column="userAccount" />
+		<result property="userName" column="userName" />
+		<result property="userPassword" column="userPassword" />
+		<result property="userEmail" column="userEmail" />
+		<result property="userCreateTime" column="userCreateTime" />
+		<result property="userAvatar" column="userAvatar" />
+		<result property="userType" column="userType" />
+		<result property="userState" column="userState" />
+		<result property="userAddress" column="userAddress" />
+		<result property="userPhone" column="userPhone" />
+		<result property="userSex" column="userSex" />
+	</resultMap>
+</mapper>

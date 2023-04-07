@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.PlantDetailsMapper">
+
+	<insert id="addPlantDetails" parameterType="com.plant.entity.PlantDetails">
+		<selectKey keyProperty="plantDetailsID" order="AFTER"
+			resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		plantDetails(plantID,plantPrice,plantSales,plantDescribe,plantStock,plantDetailsState)
+		values(#{plantID}, #{plantPrice}, #{plantSales},
+		#{plantDescribe},
+		#{plantStock}, #{plantDetailsState})
+	</insert>
+	
+	<update id="updatePlantDetails" parameterType="com.plant.entity.PlantDetails">
+		update PlantDetails   
+		<set>
+		<if test="plantPrice!=null">plantPrice = #{plantPrice},</if>
+		<if test="plantSales!=null">plantSales=#{plantSales},</if>
+		<if test="plantDescribe!=null">plantDescribe = #{plantDescribe},</if>
+		<if test="plantStock!=null">plantStock=#{plantStock},</if>
+		<if test="plantDetailsState!=null">plantDetailsState = #{plantDetailsState}</if>
+	    </set> 		    
+	     where plantDetailsID = #{plantDetailsID}
+	</update>
+
+	<select id="findPlantDetails" parameterType="com.plant.entity.PlantDetails"
+		resultMap="plantDetailsMap">
+		select * from plantDetails pDetails join plant p on pDetails.plantID= p.plantID
+		join plantDetailsImage pDetailsImage on pDetails.plantDetailsID=pDetailsImage.plantDetailsID where 1=1 
+		<trim prefix="" prefixOverrides="and/or"> 
+	     <if  test="plantDescribe!=null and plantDescribe!=''">
+            and (p.plantName like '%${plantDescribe}%' or pDetails.plantDescribe like '%${plantDescribe}%')
+         </if>
+         <if  test="plantDetailsState!=null and plantDetailsState!=''">
+            and pDetails.plantDetailsState = '${plantDetailsState}' 
+         </if>
+         <if  test="plantID!=null and plantID!=''">
+            and pDetails.plantID = ${plantID}
+         </if>
+         </trim>
+		order by p.plantID ASC
+	</select>
+	
+	<select id="findPlantDetailsByID" parameterType="Integer"
+		resultMap="plantDetailsMap">
+		select * from plantDetails pDetails join plant p on pDetails.plantID= p.plantID
+		join plantDetailsImage pDetailsImage on pDetails.plantDetailsID=pDetailsImage.plantDetailsID 
+		where pDetails.plantDetailsID=${plantDetailsID} order by p.plantID ASC 
+	</select>
+	
+	<select id="findPlantDetailsByPlantID" parameterType="Integer"
+		resultMap="plantDetailsMap">
+		select * from plantDetails pDetails join plant p on pDetails.plantID= p.plantID
+		join plantDetailsImage pDetailsImage on pDetails.plantDetailsID=pDetailsImage.plantDetailsID 
+		where p.plantID=${plantID} order by p.plantID ASC 
+	</select>
+	
+	<delete id="deletePlantDetailsByID" parameterType="Integer">
+		delete from PlantDetails where plantDetailsID=#{plantDetailsID}
+	</delete>
+
+	<!-- 一对一关联查询 -->
+	<resultMap type="com.plant.entity.PlantDetails" id="plantDetailsMap">
+		<id property="plantDetailsID" column="plantDetailsID" />
+		<result property="plantID" column="plantID" />
+		<result property="plantPrice" column="plantPrice" />
+		<result property="plantSales" column="plantSales" />
+		<result property="plantDescribe" column="plantDescribe" />
+		<result property="plantStock" column="plantStock" />
+		<result property="plantDetailsState" column="plantDetailsState" />
+
+		<association property="plant" column="plantID"
+			javaType="com.plant.entity.Plant">
+			<id property="plantID" column="plantID" />
+			<result property="plantName" column="plantName" />
+			<result property="plantState" column="plantState" />
+			<result property="plantCreateTime" column="plantCreateTime" />
+			<result property="plantAddress" column="plantAddress" />
+			<result property="viewTimes" column="viewTimes" />
+			<result property="plantType" column="plantType" />
+			<result property="plantLikesNumber" column="plantLikesNumber" />
+			<result property="plantCollectNumber" column="plantCollectNumber" />
+			<result property="plantEnglishName" column="plantEnglishName" />
+		</association>
+
+		<association property="plantDetailsImage" column="plantDetailsID"
+			javaType="com.plant.entity.PlantDetailsImage">
+			<id property="plantDetailsImageID" column="plantDetailsImageID" />
+			<result property="plantDetailsID" column="plantDetailsID" />
+			<result property="plantDetailsImagePath" column="plantDetailsImagePath" />
+			<result property="plantDetailsImageDescribe" column="plantDetailsImageDescribe" />
+		</association>
+
+	</resultMap>
+
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plant.dao.PlantDetailsImageMapper">
+
+	<insert id="addPlantDetailsImage" parameterType="com.plant.entity.PlantDetailsImage">
+		insert into
+		plantDetailsImage(plantDetailsID,plantDetailsImagePath,plantDetailsImageDescribe)
+		values(#{plantDetailsID}, #{plantDetailsImagePath}, #{plantDetailsImageDescribe})
+	</insert>
+	
+	<update id="updatePlantDetailsImage" parameterType="com.plant.entity.PlantDetailsImage">
+		update PlantDetailsImage  
+		<set>
+		<if test="plantDetailsImagePath!=null">plantDetailsImagePath = #{plantDetailsImagePath},</if>
+		<if test="plantDetailsImageDescribe!=null">plantDetailsImageDescribe=#{plantDetailsImageDescribe},</if>
+	    </set> 		    
+	     where plantDetailsImageID = #{plantDetailsImageID}
+	</update>
+	
+	<delete id="deletePlantDetailsImageByID" parameterType="Integer">
+		delete from PlantDetailsImage where plantDetailsID=#{plantDetailsID}
+	</delete>
+
+</mapper>
